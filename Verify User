@@ -1,0 +1,30 @@
+{{$verifyingChannelID := [redacted]}}
+{{$needsVerifRoleID :=[redacted]}}
+{{$verifiedID := [redacted]}}
+{{$modLogChannelID := [redacted]}}
+{{$welcomeChannelID := [redacted]}}
+{{$rolesChannelID := [redacted]}}
+{{$introChannelID := [redacted]}}
+
+{{$args := .CmdArgs }}
+
+{{if eq (len $args) 1}}
+    {{if eq (getChannel nil).ID $verifyingChannelID}}
+        {{$user := index $args 0}}
+        {{if targetHasRoleID $user $needsVerifRoleID}}
+            {{giveRoleName $user $verifiedID}}
+            Member verified! :grin:
+            {{$msg := "<@{{.User.ID}}> gave {{$verifiedID}} to user {{$user.Username}}"}}
+            {{$msg2 := "Welcome to the clan {{$user.Username}}! Please <#{{$rolesChannelID}}> and consider <#{{$introChannelID}}>ing!! :grin:"}}
+            {{sendMessage $modLogChannelID $msg}}
+            {{sendMessage $welcomeChannelID $msg2}}
+        {{else}}
+            They're already verified! :sweat_smile:
+        {{end}}
+    {{else}}
+        Can only be used in <#{{$verifyingChannelID}}>
+    {{end}}
+{{else}}
+    Correct usage of the command: -verify username
+    Missing Username
+{{end}}
